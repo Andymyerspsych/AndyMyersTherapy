@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Socials | Andy Myers Psychotherapy</title>
+
+<style>
+:root {
+  --bg: #f6f2ee;
+  --text: #2f2a27;
+  --muted: #6f6a66;
+  --accent: #7b9e8e;
+  --card: #ffffff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+}
+header { background: rgba(232,226,220,0.9); border-bottom: 1px solid #ddd6cf; position: sticky; top: 0; z-index: 10; }
+.container { max-width: 1100px; margin: 0 auto; padding: 1.5rem; }
+nav { display: flex; justify-content: space-between; align-items: center; }
+nav a { margin-left: 1.5rem; text-decoration: none; color: var(--text); font-size: 0.95rem; }
+nav a:hover { color: var(--accent); }
+.logo { height: 72px; }
+.hero { padding: 6rem 1.5rem 5rem; background: linear-gradient(180deg, #ffffff 0%, var(--bg) 100%); }
+.hero h1 { font-size: 2.6rem; margin-bottom: 1rem; }
+.hero p { max-width: 720px; color: var(--muted); }
+section { padding: 4rem 1.5rem; }
+.card { background: var(--card); padding: 3rem; border-radius: 18px; box-shadow: 0 18px 40px rgba(0,0,0,0.06); margin-bottom: 3rem; }
+h2 { font-size: 1.8rem; margin-bottom: 1.25rem; }
+.post { margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #eee; }
+.post h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+.post p { color: var(--muted); margin-bottom: 0.75rem; }
+.pagination { text-align: center; margin-top: 2rem; }
+.pagination a { display: inline-block; padding: 8px 14px; margin: 0 5px; border: 1px solid #ddd; text-decoration: none; color: var(--text); border-radius: 6px; }
+.pagination a.active { background: var(--accent); color: white; border-color: var(--accent); }
+.social-card h2, .social-card .social-text { text-align: center; }
+.social-icons { display: flex; justify-content: center; gap: 40px; margin-top: 1.5rem; }
+.social-icon { width: 50px; height: auto; transition: transform 0.2s ease; }
+.social-icon:hover { transform: scale(1.1); }
+iframe { width: 100%; max-width: 600px; border-radius: 12px; margin-top: 1rem; }
+footer { background: #b37242; color: black; padding: 1rem; text-align: center; }
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="container">
+    <nav>
+      <a href="index.html"><!-- logo links to root folder -->
+        <img src="logo.png" alt="Andy Myers Psychotherapy" class="logo">
+      </a>
+      <div>
+          <a href="index.html">Home</a>
+          <a href="index.html#services">Services</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+          <a href="socials.html">Socials</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<section class="hero">
+  <div class="container">
+    <h1>Socials & Resources</h1>
+    <p>Connect with me, watch short videos, and explore research and blog posts relevant to therapy and mental health.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+
+    <!-- Social Media -->
+    <div class="card social-card">
+      <h2>Social Media Links</h2>
+      <p class="social-text"><i>Follow for insights and updates:</i></p>
+      <div class="social-icons">
+        <a href="https://www.instagram.com/am.psychotherapy" target="_blank">
+          <img src="Instagram.png" alt="Instagram" class="social-icon">
+        </a>
+        <a href="https://www.facebook.com/am.psychotherapy" target="_blank">
+          <img src="Facebook.png" alt="Facebook" class="social-icon">
+        </a>
+        <a href="https://www.youtube.com/@AMPsychotherapy" target="_blank">
+          <img src="Youtube.png" alt="YouTube" class="social-icon">
+        </a>
+      </div>
+    </div>
+
+    <!-- Video Shorts -->
+    <div class="card">
+      <h2>Video Shorts</h2>
+      <p><i>Short reflections and mental health insights.</i></p>
+      <!-- Replace VIDEO_ID with actual YouTube ID -->
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID" allowfullscreen></iframe>
+    </div>
+
+    <!-- Blog & Research -->
+    <div class="card">
+      <h2>Blog & Research</h2>
+      <p><i>I occasionally write blog posts and share research papers.</i></p>
+
+      <!-- Posts -->
+      <article class="post">
+        <h3>Is Comparison Really the Thief of Joy?</h3>
+        <p>A reflection on comparison, judgement, and self-criticism.</p>
+        <a href="comparison-full.html">Read Full Article →</a>
+      </article>
+
+      <article class="post">
+        <h3><a href="https://www.frontiersin.org/journals/psychiatry/articles/10.3389/fpsyt.2025.1697900/full?utm_source=chatgpt.com#s1" target="_blank">ADHD as a circadian rhythm disorder: evidence and implications for chronotherapy</a></h3>
+        <p>This recent study suggests that for many people with ADHD, the body clock runs late rather than the brain being “wired differently,” and gently resetting sleep–wake timing may ease ADHD difficulties.</p>
+      </article>
+
+      <!-- Pagination -->
+      <div class="pagination">
+        <a class="active" href="socials.html">1</a>
+        <a href="socials-2.html">2</a>
+        <a href="socials-3.html">3</a>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <p>2026 Andy Myers Psychotherapy Practice</p>
+    <p>Registered and insured.</p>
+    <p><a href="privacy.html">Privacy Policy</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
