@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Private Diary | Andy Myers</title>
+
+<style>
+body { font-family: system-ui; background: #f6f2ee; padding: 2rem; }
+.hidden { display: none; }
+
+h1 { margin-bottom: 1rem; }
+
+#login { max-width: 400px; margin: 0 auto; padding: 2rem; background: #fff; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+
+#login input { width: 100%; padding: 0.8rem; margin-bottom: 1rem; border-radius: 8px; border: 1px solid #ccc; }
+
+#login button { width: 100%; padding: 0.8rem; border-radius: 999px; border: none; background: #7b9e8e; color: white; cursor: pointer; }
+
+#diary { max-width: 720px; margin: 0 auto; }
+
+.slot { display: inline-block; margin: 0.3rem; padding: 0.6rem 1rem; border-radius: 999px; border: 1px solid #7b9e8e; cursor: pointer; background: white; }
+.booked { background: #7b9e8e; color: white; }
+</style>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyB7jqV56pnAZp_qQrEeKBE7OodYgd696Sw",
+  authDomain: "practice-diary-48a18.firebaseapp.com",
+  projectId: "practice-diary-48a18",
+  storageBucket: "practice-diary-48a18.firebasestorage.app",
+  messagingSenderId: "541787004534",
+  appId: "1:541787004534:web:01dffb1f0dd4a9f8020957"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// Login/logout functions
+window.login = async function() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  try { await signInWithEmailAndPassword(auth, email, password); } 
+  catch(e){ alert("Login failed: " + e.message); }
+};
+
+window.logout = async function() { await signOut(auth); };
+
+// Show diary when logged in
+onAuthStateChanged(auth, user => {
+  document.getElementById("login").classList.toggle("hidden", !!user);
+  document.getElementById("diary").classList.toggle("hidden", !user);
+  if (user) generateCalendar();
+});
+
+// Days
+const days = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
+
+// Generate diary slots 11am - 7pm
+async function generateCalendar() {
+  const container = document.getElementById("calendar");
+  container.innerHTML = "";
+
+  for (const day of days) {
+    const title = document.createElement("h3");
+    title.textContent = day;
+    container.appendChild(title);
+
+    for (let hour = 11; hour <= 19; hour++) {  // 11am - 7pm
+      let displayHour = hour > 12 ? hour - 12 : hour;
+      let suffix = hour >= 12 ? "pm" : "am";
+
+      const slotId = `${day}-${hour}`;
+      const slotRef = doc(db,"slots",slotId);
+      const slotSnap = await getDoc(slotRef);
+
+      const slot = document.createElement("div");
+      slot.className = "slot";
+      slot.textContent = `${displayHour}:00${suffix}`;
+
+      if (slotSnap.exists()) {
+        slot.classList.add("booked");
+        slot.textContent += ` (${slotSnap.data().code})`;
+      }
+
+      slot.onclick = async () => {
+        if (slotSnap.exists()) {
+          if (confirm("Clear booking?")) {
+            await deleteDoc(slotRef);
+            generateCalendar();
+          }
+        } else {
+          const code = prompt("Enter client code:");
+          if (code) {
+            await setDoc(slotRef,{ code });
+            generateCalendar();
+          }
+        }
+      };
+
+      container.appendChild(slot);
+    }
+  }
+}
+</script>
+</head>
+
+<body>
+<div id="login">
+  <h2>Login to Private Diary</h2>
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<div id="diary" class="hidden">
+  <h1>Session Diary</h1>
+  <button onclick="logout()">Logout</button>
+  <div id="calendar"></div>
+</div>
+</body>
+</html>
