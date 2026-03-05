@@ -19,8 +19,9 @@ h1 { margin-bottom: 1rem; }
 
 #diary { max-width: 720px; margin: 0 auto; }
 
-.slot { display: inline-block; margin: 0.3rem; padding: 0.6rem 1rem; border-radius: 999px; border: 1px solid #7b9e8e; cursor: pointer; background: white; }
-.booked { background: #7b9e8e; color: white; }
+.slot { display: inline-block; margin: 0.3rem; padding: 0.6rem 1rem; border-radius: 999px; border: 1px solid #7b9e8e; cursor: pointer; background: white; transition: all 0.2s ease; }
+.slot:hover { transform: scale(1.05); }
+.booked { background: #7b9e8e; color: white; cursor: not-allowed; }
 </style>
 
 <!-- Firebase SDK -->
@@ -61,10 +62,8 @@ onAuthStateChanged(auth, user => {
   if (user) generateCalendar();
 });
 
-// Days
 const days = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
 
-// Generate diary slots 11am - 7pm
 async function generateCalendar() {
   const container = document.getElementById("calendar");
   container.innerHTML = "";
@@ -75,23 +74,19 @@ async function generateCalendar() {
     container.appendChild(title);
 
     for (let hour = 11; hour <= 19; hour++) {  // 11am - 7pm
-      let displayHour = hour > 12 ? hour - 12 : hour;
-      let suffix = hour >= 12 ? "pm" : "am";
-
+      const displayHour = hour > 12 ? hour - 12 : hour;
+      const suffix = hour >= 12 ? "pm" : "am";
       const slotId = `${day}-${hour}`;
-      const slotRef = doc(db,"slots",slotId);
-      const slotSnap = await getDoc(slotRef);
 
       const slot = document.createElement("div");
       slot.className = "slot";
       slot.textContent = `${displayHour}:00${suffix}`;
 
-      if (slotSnap.exists()) {
-        slot.classList.add("booked");
-        slot.textContent += ` (${slotSnap.data().code})`;
-      }
-
+      // Fetch latest snapshot on click to avoid duplication issues
       slot.onclick = async () => {
+        const slotRef = doc(db, "slots", slotId);
+        const slotSnap = await getDoc(slotRef);
+
         if (slotSnap.exists()) {
           if (confirm("Clear booking?")) {
             await deleteDoc(slotRef);
@@ -100,11 +95,19 @@ async function generateCalendar() {
         } else {
           const code = prompt("Enter client code:");
           if (code) {
-            await setDoc(slotRef,{ code });
+            await setDoc(slotRef, { code });
             generateCalendar();
           }
         }
       };
+
+      // Check if slot is already booked
+      const slotRef = doc(db, "slots", slotId);
+      const slotSnap = await getDoc(slotRef);
+      if (slotSnap.exists()) {
+        slot.classList.add("booked");
+        slot.textContent += ` (${slotSnap.data().code})`;
+      }
 
       container.appendChild(slot);
     }
