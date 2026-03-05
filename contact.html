@@ -300,14 +300,16 @@ async function generateSlots() {
 
 generateSlots();
 
-// reCAPTCHA submit control
-function enableSubmit() {
+// --- reCAPTCHA functions ---
+window.enableSubmit = function() {
   document.getElementById('submitBtn').disabled = false;
 }
-function disableSubmit() {
+
+window.disableSubmit = function() {
   document.getElementById('submitBtn').disabled = true;
 }
 
+// --- form submission ---
 const form = document.getElementById('contactForm');
 const responseEl = document.getElementById('formResponse');
 
@@ -325,7 +327,7 @@ form.addEventListener('submit', async (e) => {
       responseEl.textContent = "Thank you. Your message has been sent.";
       form.reset();
       grecaptcha.reset();
-      disableSubmit();
+      window.disableSubmit();
     } else {
       responseEl.textContent = "There was a problem sending your message.";
     }
